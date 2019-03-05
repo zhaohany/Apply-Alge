@@ -1,0 +1,227 @@
+% Math 357 Matlab Project #2
+format compact
+rand('seed', 8944)
+% Question 1 (a)
+F2 = fft(eye(2))
+F2 =
+     1     1
+     1    -1
+F4 = fft(eye(4))
+F4 =
+   1.0000 + 0.0000i   1.0000 + 0.0000i   1.0000 + 0.0000i   1.0000 + 0.0000i
+   1.0000 + 0.0000i   0.0000 - 1.0000i  -1.0000 + 0.0000i   0.0000 + 1.0000i
+   1.0000 + 0.0000i  -1.0000 + 0.0000i   1.0000 + 0.0000i  -1.0000 + 0.0000i
+   1.0000 + 0.0000i   0.0000 + 1.0000i  -1.0000 + 0.0000i   0.0000 - 1.0000i
+F8 = fft(eye(8));
+norm((1/8)*F8*F8' - eye(8))
+ans =
+   1.1900e-16
+% Question 1 (b)
+y = zeros(16, 1);
+y(2) = 1;
+fftgui(y)
+y = zeros(16, 1);
+y(2) = 1;
+y(3) = 1;
+fftgui(y)
+% Question 1 (b) (i)
+%In first case where only y(2)=1, the real part is sampled cosine waves and the imaginary part is sampler sine waves.
+%In second case where y(2) and y(3)=1, the real part is sampled cosine waves and the imaginary part is sampler sine waves with a varation inside each cycle.
+%Compare both graph, the difference is the frequency(Periodic ). y(3)gives a graph with high frequency(Number of cycles in same amount of time).Also the shape of waves changes
+% Question 1 (b) (ii)
+%The Fourier transform vector is skew-symmetric around Nyquist point(Both real and imaginary part)
+%When it is a real valued function, it's Fourier coefficients are complex numbers with the conjugate symmetry property
+fftgui
+% Question 2 (a)
+y = tone(1,1);
+Fs = 2^15;
+sound(y, Fs)
+r = fix(10*rand(1))
+r =
+     4
+y = tone(2,1);
+sound(y, Fs)
+t = (1/Fs)*[1:512];
+figure, plot(t, y(1:512))
+powergraph(y, Fs)
+% Question 2 (b)
+load train
+sound(y, Fs)
+n = length(y); t = (1/Fs)*[1:n];
+figure, plot(t,y)
+powergraph(y, Fs)
+% Question 3 (a)
+S = shift(4)
+S =
+     0     0     0     1
+     1     0     0     0
+     0     1     0     0
+     0     0     1     0
+v = fix(10*rand(4,1))
+v =
+     9
+     0
+     7
+     3
+S*v
+ans =
+     3
+     9
+     0
+     7
+(1/4)*F4'*S*F4
+ans =
+   1.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+   0.0000 + 0.0000i   0.0000 + 1.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+   0.0000 + 0.0000i   0.0000 + 0.0000i  -1.0000 + 0.0000i   0.0000 + 0.0000i
+   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 - 1.0000i
+e = eig(S)
+e =
+  -1.0000 + 0.0000i
+   0.0000 + 1.0000i
+   0.0000 - 1.0000i
+   1.0000 + 0.0000i
+% Question 3 (b)
+I = eye(4)
+I =
+     1     0     0     0
+     0     1     0     0
+     0     0     1     0
+     0     0     0     1
+v(1)
+ans =
+     9
+C=v(1)*I+v(2)*S+v(3)*S^2+v(4)*S^3
+C =
+     9     3     7     0
+     0     9     3     7
+     7     0     9     3
+     3     7     0     9
+% Question 3 (b) (i)
+(1/4)*F4'*C*F4
+ans =
+  19.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+   0.0000 + 0.0000i   2.0000 - 3.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+   0.0000 + 0.0000i   0.0000 + 0.0000i  13.0000 + 0.0000i   0.0000 + 0.0000i
+   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   2.0000 + 3.0000i
+% Question 3 (b) (ii)
+eig(C)
+ans =
+   2.0000 + 3.0000i
+   2.0000 - 3.0000i
+  19.0000 + 0.0000i
+  13.0000 + 0.0000i
+% Question 3 (b) (iii)
+eig(C)/e
+ans =
+  -2.0000 - 3.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+  -2.0000 + 3.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+ -19.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+ -13.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+eig(C)/eig(S)
+ans =
+  -2.0000 - 3.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+  -2.0000 + 3.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+ -19.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+ -13.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
+%General: Eig(C)=-1*Eig(c)*Eig(S)
+% Question 3 (c)
+S = shift(32);
+I = eye(32);
+C=movmean(S,3);
+% Question 3 (c)(i)
+Cy[j] = conv(f,y)[j]
+% Question 3 (c)(ii)by hand
+% Question 3 (c)(iii)
+t = [0:31]; y = rand(32,1);
+figure, plot(t,y, 'r-'); hold on
+plot(t, C*y, 'b:')
+plot(t, C*C*y, 'g--')
+% Question 4 (a)
+y = fix(20*rand(8,1))
+y =
+     9
+     2
+     5
+     6
+    12
+    16
+    11
+    13
+P = downsamp(4)
+P =
+     1     0     0     0     0     0     0     0
+     0     0     1     0     0     0     0     0
+     0     0     0     0     1     0     0     0
+     0     0     0     0     0     0     1     0
+     0     1     0     0     0     0     0     0
+     0     0     0     1     0     0     0     0
+     0     0     0     0     0     1     0     0
+     0     0     0     0     0     0     0     1
+P*y
+ans =
+     9
+     5
+    12
+    11
+     2
+     6
+    16
+    13
+y = fix(20*rand(8,1))
+y =
+    11
+    11
+     7
+     6
+    11
+     7
+     9
+     3
+P = downsamp(4)
+P =
+     1     0     0     0     0     0     0     0
+     0     0     1     0     0     0     0     0
+     0     0     0     0     1     0     0     0
+     0     0     0     0     0     0     1     0
+     0     1     0     0     0     0     0     0
+     0     0     0     1     0     0     0     0
+     0     0     0     0     0     1     0     0
+     0     0     0     0     0     0     0     1
+P*y
+ans =
+    11
+     7
+    11
+     9
+    11
+     6
+     7
+     3
+% Question 4 (b)
+P4 = downsamp(2); D2 = fftdiag(2); F2 = fft(eye(2));
+F4 = [F2, D2*F2; F2 -D2*F2]*P4
+F4 =
+   1.0000 + 0.0000i   1.0000 + 0.0000i   1.0000 + 0.0000i   1.0000 + 0.0000i
+   1.0000 + 0.0000i   0.0000 - 1.0000i  -1.0000 + 0.0000i  -0.0000 + 1.0000i
+   1.0000 + 0.0000i  -1.0000 + 0.0000i   1.0000 + 0.0000i  -1.0000 + 0.0000i
+   1.0000 + 0.0000i  -0.0000 + 1.0000i  -1.0000 + 0.0000i   0.0000 - 1.0000i
+P8 = downsamp(4); D4 = fftdiag(4);
+P8 = downsamp(4);
+D4 = fftdiag(4);
+F8 = [F4, D4*F4; F4 -D4*F4]*P8;
+norm(F8 - fft(eye(8)))
+ans =
+   7.0217e-16
+% Question 4 (c)
+F = fft(eye(4096)); x = rand(4096,1);
+tic; F*x; matrixtime = toc
+matrixtime =
+    0.0201
+tic; fft(x); ffttime = toc
+ffttime =
+   1.5599e-04
+speedup = floor(matrixtime/ffttime)
+speedup =
+   128
+diary off
